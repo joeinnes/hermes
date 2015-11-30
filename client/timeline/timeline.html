@@ -1,3 +1,22 @@
 <template name="timeline">
-	Blah
+  {{#each messages}}
+  <div class="media">
+    <div class="media-left">
+      <a href="#">
+        <img class="media-object" src="http://placehold.it/64x64" alt="...">
+      </a>
+    </div>
+    <div class="media-body">
+      <h4 class="media-heading">{{username}}</h4> 
+      {{message}}
+    </div>
+  </div>
+  {{/each}}
+    {{#if Template.subscriptionsReady}}
+    {{#if hasMorePosts}}
+      <a class="load-more" href="#">Load More</a>
+    {{/if}}
+  {{else}}
+    <div class="loading">{{>spinner}}</div>
+  {{/if}}
 </template>
