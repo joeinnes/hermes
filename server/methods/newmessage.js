@@ -1,7 +1,7 @@
 Meteor.methods({
   newMessage: function (text) {
     if (!Meteor.userId()) {
-      throw new Meteor.Error("not-authorised");
+      throw new Meteor.Error("You are not logged in");
     }
 
     Messages.insert({

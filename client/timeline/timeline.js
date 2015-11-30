@@ -1,3 +1,5 @@
+/* global TimeSync */
+/* global moment */
 /* global Email */
 /* global Gravatar */
 /* global ReactiveVar */
@@ -22,6 +24,13 @@ Template.timeline.helpers({
 	},
 	createdAtTime: function(createdAt) {
 		return moment(createdAt).from(TimeSync.serverTime());
+	},
+	usersOwn: function(userId) {
+		if (Meteor.userId() === userId) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 });
 
@@ -34,6 +43,17 @@ Template.timeline.events({
 
 		limit += 20;
 		instance.limit.set(limit);
+	},
+	'click .delete': function (event) {
+		var messageId = event.target.id;
+		Meteor.call('delete', messageId, function(error, result) {
+			if (error) {
+				Bert.alert('Couldn\'t delete message! ' + error, 'danger', 'growl-top-right');
+			} else {
+				Bert.alert('Message deleted!', 'success', 'growl-top-right');
+			}
+		})
+		// Call delete this
 	}
 });
 
