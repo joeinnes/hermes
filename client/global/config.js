@@ -16,3 +16,5 @@ Accounts.ui.config({
     }
   }]
 });
+
+Meteor.subscribe('users');

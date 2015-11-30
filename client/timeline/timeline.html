@@ -1,15 +1,20 @@
 <template name="timeline">
   {{#each messages}}
+  <div class="panel panel-default">
+  <div class="panel-body">
   <div class="media">
     <div class="media-left">
       <a href="#">
-        <img class="media-object" src="http://placehold.it/64x64" alt="...">
+        <img class="media-object" src={{getAvatarUrl author}} alt="...">
       </a>
     </div>
     <div class="media-body">
       <h4 class="media-heading">{{username}}</h4> 
       {{message}}
     </div>
+  </div>
+  </div>
+  <div class="panel-footer">{{createdAtTime createdAt}}</div>
   </div>
   {{/each}}
     {{#if Template.subscriptionsReady}}

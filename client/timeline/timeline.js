@@ -1,3 +1,6 @@
+/* global Email */
+/* global Gravatar */
+/* global ReactiveVar */
 /* global Messages */
 Template.timeline.helpers({
 	// the posts cursor
@@ -7,6 +10,18 @@ Template.timeline.helpers({
 	// are there more posts to show?
 	hasMoreMessages: function () {
 		return Template.instance().messages().count() >= Template.instance().limit.get();
+	},
+	getAvatarUrl: function(userId) {
+		var options = {
+			secure: true,
+			size: 64
+		};
+		var userEmail = Meteor.users.findOne(userId).emails[0].address;
+		var url = Gravatar.imageUrl(userEmail, options);
+		return url;
+	},
+	createdAtTime: function(createdAt) {
+		return moment(createdAt).from(TimeSync.serverTime());
 	}
 });
 
@@ -34,12 +49,10 @@ Template.timeline.onCreated(function () {
 		var subscription = instance.subscribe('messages', limit);
 		if (subscription.ready()) {
 			instance.loaded.set(limit);
-		} else {
-			console.log("> Subscription is not ready yet. \n\n");
 		}
 	});
 
     instance.messages = function () {
-		return Messages.find({}, { limit: instance.loaded.get() });
+		return Messages.find({}, { limit: instance.loaded.get(), sort: {createdAt: -1} });
 	}
 });
