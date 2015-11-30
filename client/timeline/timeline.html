@@ -14,7 +14,7 @@
     </div>
   </div>
   </div>
-  <div class="panel-footer">{{createdAtTime createdAt}} {{#if usersOwn author}}<span class="pull-right">Edit - <span class="delete" id={{_id}}>Delete</span></span>{{/if}}</div>
+  <div class="panel-footer">{{createdAtTime createdAt}} {{#if usersOwn author}}<span class="pull-right"><span class="edit glyphicon glyphicon-pencil" id={{_id}}></span> <span class="delete glyphicon glyphicon-trash" id={{_id}}></span></span>{{/if}}</div>
   </div>
   {{/each}}
     {{#if Template.subscriptionsReady}}
