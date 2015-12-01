@@ -11,7 +11,12 @@ Accounts.ui.config({
         Bert.alert('Please choose a user name', 'danger', 'growl-top-right');
         return false;
       } else {
-        return true;
+        if (value.indexOf(" ") > -1) {
+          Bert.alert('Sorry, no spaces!', 'danger', 'growl-top-right');
+          return false;
+        } else {
+          return true;
+        }
       }
     }
   }]
