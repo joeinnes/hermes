@@ -6,3 +6,10 @@ FlowRouter.route('/', {
     }
 });
 
+FlowRouter.route('user/:username', {
+    name: 'profile',
+    action: function () {
+        BlazeLayout.render("main", { content: "profile" });
+    }
+});
+
