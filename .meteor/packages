@@ -40,3 +40,5 @@ mizzao:timesync
 momentjs:moment
 
 joeinnes:meteor-autolinker
+
+arillo:flow-router-helpers
