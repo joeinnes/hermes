@@ -10,7 +10,7 @@
       </a>
     </div>
     <div class="media-body">
-      <h4 class="media-heading">{{username}}</h4> 
+      <h4 class="media-heading"><a href="{{pathFor 'profile' username=username}}">{{username}}</a></h4> 
       {{#autolink}}{{message}}{{/autolink}}
     </div>
   </div>
