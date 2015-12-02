@@ -18,7 +18,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         {{#if currentUser}}
-          <li><a href="{{pathFor 'my-profile'}}"><span class="fa fa-user" aria-hidden="true"></span> My Profile</a></li>
+          <li><a href="{{pathFor 'profile' username=currentUser.username}}"><span class="fa fa-user" aria-hidden="true"></span> My Profile</a></li>
         {{/if}}
         {{> loginButtons}}
       </ul>
