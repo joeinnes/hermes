@@ -1,4 +1,7 @@
 <template name="profile">
+	{{#unless currentUser}}
+		{{> notloggedin}}
+	{{else}}
 	{{#if Template.subscriptionsReady}} 
 		{{#if getUser}}
 			<h1>{{getUser.username}}</h1>
@@ -42,4 +45,5 @@
 	{{else}}
 		<div class="loading">{{>spinner}}</div>
 	{{/if}}
+	{{/unless}}
 </template>

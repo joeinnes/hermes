@@ -1,10 +1,6 @@
 <template name="home">
-	{{#unless loggedIn}}
-	<div class="jumbotron">
-		<h1>Hermes</h1>
-		<p>Hermes is an app that lets you share your thoughts and ideas with anyone who's listening in just 140 characters!</p>
-		<p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>
-	</div>
+	{{#unless currentUser}}
+		{{> notloggedin}}
 	{{else}}
 		{{> newmessage}}
 		{{>Template.dynamic template=view}}

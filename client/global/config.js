@@ -23,3 +23,7 @@ Accounts.ui.config({
 });
 
 Meteor.subscribe('users');
+
+Accounts.onLogin(function() {
+  FlowRouter.go('home');
+});

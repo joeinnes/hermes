@@ -27,3 +27,9 @@ FlowRouter.route('/timeline', {
         BlazeLayout.render("main", { content: "home", view: "timeline" });
     }
 });
+
+FlowRouter.notFound = {
+    action: function() {
+        FlowRouter.go('home');
+    }
+};
