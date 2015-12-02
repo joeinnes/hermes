@@ -1,11 +1,35 @@
 Template.profile.helpers({
 	getUser: function () {
 		var username = FlowRouter.getParam('username');
-		return Meteor.users.findOne({username: username});
+		return Meteor.users.findOne({ username: username });
 	},
+	// the posts cursor
 	messages: function () {
 		return Template.instance().messages();
 	},
+	// are there more posts to show?
+	hasMoreMessages: function () {
+		return Template.instance().messages().count() >= Template.instance().limit.get();
+	},
+	getAvatarUrl: function(userId, size) {
+		var options = {
+			secure: true,
+			size: size
+		};
+		var userEmail = Meteor.users.findOne(userId).emails[0].address;
+		var url = Gravatar.imageUrl(userEmail, options);
+		return url;
+	},
+	createdAtTime: function(createdAt) {
+		return moment(createdAt).from(TimeSync.serverTime());
+	},
+	usersOwn: function(userId) {
+		if (Meteor.userId() === userId) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 });
 
 Template.profile.events({
@@ -17,6 +41,12 @@ Template.profile.events({
 
 		limit += 20;
 		instance.limit.set(limit);
+	},
+	'click .subscribe': function () {
+		var username = FlowRouter.getParam('username');
+		var viewingUser = Meteor.users.findOne({ username: username });
+		Meteor.users.update( { _id: Meteor.userId() }, { $push: {"profile.subscriptions": viewingUser._id}} );
+		Bert.alert('Successfully subscribed', 'success', 'growl-top-right');
 	}
 });
 
@@ -37,6 +67,6 @@ Template.profile.onCreated(function () {
 
     instance.messages = function () {
 		var username = FlowRouter.getParam('username');
-		return Messages.find({username: username}, { limit: instance.loaded.get(), sort: {createdAt: -1} });
+		return Messages.find({ username: username }, { limit: instance.loaded.get(), sort: { createdAt: -1 } });
 	}
 });

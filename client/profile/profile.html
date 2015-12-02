@@ -1,26 +1,45 @@
 <template name="profile">
-	{{#if getUser}}
-	<h1>{{getUser.username}}</h1>
-	<p>{{getUser.profile.text}}</p>
-	{{#each messages}}
-	<div class="panel panel-default">
-		<div class="panel-body">
-			<div class="media">
-				<div class="media-left">
-					<a href="#">
-						<img class="media-object" src={{getAvatarUrl author}} alt="...">
-					</a>
+	{{#if Template.subscriptionsReady}} 
+		{{#if getUser}}
+			<h1>{{getUser.username}}</h1>
+			<img class="media-object" src={{getAvatarUrl getUser._id 250}} alt="...">
+			<p>{{getUser.profile.text}}</p>
+			<button class="btn btn-default subscribe">Subscribe</button>
+			<br>
+			<br> 
+			{{#each messages}}
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div class="media">
+							<div class="media-left">
+								<a href="#">
+									<img class="media-object" src={{getAvatarUrl author 64}} alt="...">
+								</a>
+							</div>
+							<div class="media-body">
+								<h4 class="media-heading">{{username}}</h4> 
+								{{#autolink}}{{message}}{{/autolink}}
+							</div>
+						</div>
+					</div>
+					<div class="panel-footer">
+						{{createdAtTime createdAt}} 
+						{{#if usersOwn author}}
+							<span class="pull-right">
+								<span class="edit glyphicon glyphicon-pencil" id={{_id}}></span>
+								<span class="delete glyphicon glyphicon-trash" id={{_id}}></span>
+							</span>
+						{{/if}}
+					</div>
 				</div>
-				<div class="media-body">
-					<h4 class="media-heading">{{username}}</h4> {{#autolink}}{{message}}{{/autolink}}
-				</div>
-			</div>
-		</div>
-		<div class="panel-footer">{{createdAtTime createdAt}} {{#if usersOwn author}}<span class="pull-right"><span class="edit glyphicon glyphicon-pencil" id={{_id}}></span>			<span class="delete glyphicon glyphicon-trash" id={{_id}}></span></span>{{/if}}</div>
-	</div>
-	{{/each}} {{#if Template.subscriptionsReady}} {{#if hasMorePosts}}
-	<a class="load-more" href="#">Load More</a> {{/if}} {{else}}
-	<div class="loading">{{>spinner}}</div>
-	{{/if}} {{else}}
-	<h1>Sorry, no such user</h1> {{/if}}
+			{{/each}} 
+			{{#if hasMorePosts}}
+				<a class="load-more" href="#">Load More</a>
+			{{/if}} 
+		{{else}}
+			<h1>Sorry, no such user</h1> 
+		{{/if}}
+	{{else}}
+		<div class="loading">{{>spinner}}</div>
+	{{/if}}
 </template>

@@ -4,7 +4,7 @@
 /* global Gravatar */
 /* global ReactiveVar */
 /* global Messages */
-Template.timeline.helpers({
+Template.explore.helpers({
 	// the posts cursor
 	messages: function () {
 		return Template.instance().messages();
@@ -34,7 +34,7 @@ Template.timeline.helpers({
 	}
 });
 
-Template.timeline.events({
+Template.explore.events({
 	'click .load-more': function (event, instance) {
 		event.preventDefault();
 
@@ -57,7 +57,7 @@ Template.timeline.events({
 	}
 });
 
-Template.timeline.onCreated(function () {
+Template.explore.onCreated(function () {
 
 	var instance = this;
 
@@ -73,11 +73,6 @@ Template.timeline.onCreated(function () {
 	});
 
     instance.messages = function () {
-		var subscriptions = Meteor.user().profile.subscriptions || [];
-		if (subscriptions.length) {
-			return Messages.find({author: {$in: subscriptions}}, { limit: instance.loaded.get(), sort: {createdAt: -1} });
-		} else {
-			return [];
-		}
+		return Messages.find({}, { limit: instance.loaded.get(), sort: {createdAt: -1} });
 	}
 });
