@@ -19,9 +19,11 @@
   </div>
   {{/each}}
     
-    {{#if hasMorePosts}}
-      <a class="load-more" href="#">Load More</a>
-    {{/if}}
+{{#if moreResults}}
+    <div id="showMoreResults">
+        <div class="loading">Loading...</div>
+    </div>
+{{/if}}
   {{else}}
     <div class="loading">{{>spinner}}</div>
   {{/if}}

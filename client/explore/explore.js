@@ -1,3 +1,6 @@
+/* global incrementLimit */
+/* global Bert */
+/* global ITEMS_INCREMENT */
 /* global TimeSync */
 /* global moment */
 /* global Email */
@@ -7,11 +10,11 @@
 Template.explore.helpers({
 	// the posts cursor
 	messages: function () {
-		return Template.instance().messages();
+		return Messages.find();
 	},
 	// are there more posts to show?
-	hasMoreMessages: function () {
-		return Template.instance().messages().count() >= Template.instance().limit.get();
+	moreResults: function () {
+		return !(Messages.find().count() < Session.get("itemsLimit"));
 	},
 	getAvatarUrl: function(userId) {
 		var options = {
@@ -35,14 +38,14 @@ Template.explore.helpers({
 });
 
 Template.explore.events({
-	'click .load-more': function (event, instance) {
+	'click #showMoreResults': function (event) {
 		event.preventDefault();
 
 		// get current value for limit, i.e. how many posts are currently displayed
-		var limit = instance.limit.get();
+		var limit = Session.get('itemsLimit');
 
-		limit += 20;
-		instance.limit.set(limit);
+		limit += ITEMS_INCREMENT;
+		Session.set('itemsLimit', limit);
 	},
 	'click .delete': function (event) {
 		var messageId = event.target.id;
@@ -52,8 +55,7 @@ Template.explore.events({
 			} else {
 				Bert.alert('Message deleted!', 'success', 'growl-top-right');
 			}
-		})
-		// Call delete this
+		});
 	}
 });
 
@@ -61,18 +63,36 @@ Template.explore.onCreated(function () {
 
 	var instance = this;
 
-	instance.loaded = new ReactiveVar(0);
-	instance.limit = new ReactiveVar(20);
+	Session.setDefault('itemsLimit', ITEMS_INCREMENT);
 
 	instance.autorun(function () {
-		var limit = instance.limit.get();
-		var subscription = instance.subscribe('messages', limit);
-		if (subscription.ready()) {
-			instance.loaded.set(limit);
-		}
+		instance.subscribe('messages', Session.get('itemsLimit'));
 	});
-
-    instance.messages = function () {
-		return Messages.find({}, { limit: instance.loaded.get(), sort: {createdAt: -1} });
-	}
 });
+
+function showMoreVisible() {
+	var threshold, target = $("#showMoreResults");
+	if (!target.length) return;
+
+	threshold = $(window).scrollTop() + $(window).height() - target.height() + 50;
+
+	if (target.offset().top < threshold) {
+		if (!target.data("visible")) {
+			target.data("visible", true);
+			incrementLimit(20);
+		}
+	} else {
+		if (target.data("visible")) {
+			target.data("visible", false);
+		}
+	}        
+}
+
+// run the above func every time the user scrolls
+$(window).scroll(showMoreVisible);
+
+incrementLimit = function(inc) {
+	inc = inc || 20;
+	newLimit = Session.get('itemsLimit') + inc;
+	Session.set('itemsLimit', newLimit);
+};

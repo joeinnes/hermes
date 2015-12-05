@@ -29,6 +29,16 @@ Template.profile.helpers({
 		} else {
 			return false;
 		}
+	},
+	following: function() {
+		var username = FlowRouter.getParam('username');
+		var viewingUserId = Meteor.users.findOne({ username: username })._id;
+		var following = Meteor.users.find({ _id: Meteor.userId(), "profile.subscriptions": viewingUserId}).count();
+		if (following > 0) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 });
 
@@ -47,6 +57,12 @@ Template.profile.events({
 		var viewingUser = Meteor.users.findOne({ username: username });
 		Meteor.users.update( { _id: Meteor.userId() }, { $push: {"profile.subscriptions": viewingUser._id}} );
 		Bert.alert('Successfully subscribed', 'success', 'growl-top-right');
+	},
+	'click .unsubscribe': function () {
+		var username = FlowRouter.getParam('username');
+		var viewingUser = Meteor.users.findOne({ username: username });
+		Meteor.users.update( { _id: Meteor.userId() }, { $pull: {"profile.subscriptions": viewingUser._id}} );
+		Bert.alert('Successfully unsubscribed', 'success', 'growl-top-right');
 	}
 });
 
