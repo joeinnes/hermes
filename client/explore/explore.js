@@ -10,7 +10,7 @@
 Template.explore.helpers({
 	// the posts cursor
 	messages: function () {
-		return Messages.find();
+		return Messages.find({}, {sort: {createdAt: -1}});
 	},
 	// are there more posts to show?
 	moreResults: function () {

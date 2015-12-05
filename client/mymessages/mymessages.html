@@ -1,6 +1,6 @@
-<template name="timeline">
+<template name="mymessages">
   {{#if Template.subscriptionsReady}} 
-  {{#if messagesExist}}
+  {{#if messages}}
   {{#each messages}}
   <div class="panel panel-default">
   <div class="panel-body">
@@ -24,7 +24,7 @@
       <a class="load-more" href="#">Load More</a>
     {{/if}}
   {{else}}
-    <div class="loading">Loading...</div>
+    <div class="loading">{{>spinner}}</div>
   {{/if}}
   {{else}}
   <h1>Nobody you are subscribed to has any posts :(</h1>

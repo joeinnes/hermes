@@ -21,6 +21,13 @@ FlowRouter.route('/explore', {
     }
 });
 
+FlowRouter.route('/me', {
+    name: 'me',
+    action: function () {
+        BlazeLayout.render("main", { content: "home", view: "mymessages" });
+    }
+});
+
 FlowRouter.route('/timeline', {
     name: 'timeline',
     action: function () {
