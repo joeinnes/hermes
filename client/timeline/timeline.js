@@ -7,8 +7,7 @@
 Template.timeline.helpers({
 	// the posts cursor
 	messages: function () {
-		var subscriptions = Meteor.user().profile.subscriptions || [];
-		return Messages.find({author: {$in: subscriptions}}, { limit: instance.loaded.get(), sort: {createdAt: -1} });
+		Template.instance().messages();
 	},
 	// are there more posts to show?
 	hasMoreMessages: function () {
@@ -33,9 +32,6 @@ Template.timeline.helpers({
 			return false;
 		}
 	},
-	messagesExist: function () {
-		return Messages.find().count();
-	}
 });
 
 Template.timeline.events({
@@ -64,15 +60,20 @@ Template.timeline.events({
 Template.timeline.onCreated(function () {
 
 	var instance = this;
+	var subscriptions = Meteor.user().profile.subscriptions || [];
+	var query = {author: { $in: subscriptions }};
 
-	instance.loaded = new ReactiveVar(0);
-	instance.limit = new ReactiveVar(20);
+	Session.setDefault('itemsLimit', ITEMS_INCREMENT);
 
 	instance.autorun(function () {
-		var limit = instance.limit.get();
-		var subscription = instance.subscribe('messages', limit);
-		if (subscription.ready()) {
-			instance.loaded.set(limit);
-		}
+		instance.subscribe('messages', Session.get('itemsLimit'), query);
 	});
+
+	instance.messages = function () {
+		if (subscriptions.length) {
+			return Messages.find({}, { limit: Session.get('itemsLimit'), sort: {createdAt: -1} });
+		} else { 
+			return [];
+		}
+	}
 });

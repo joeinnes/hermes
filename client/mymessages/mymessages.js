@@ -73,12 +73,7 @@ Template.mymessages.onCreated(function () {
 	});
 
     instance.messages = function () {
-		var subscriptions = Meteor.user().profile.subscriptions || [];
 		var search = new RegExp('@' + Meteor.user().username, 'g');
-		if (subscriptions.length) {
-			return Messages.find({ message: { $regex: search } }, { limit: instance.loaded.get(), sort: {createdAt: -1} });
-		} else {
-			return [];
-		}
+		return Messages.find({ message: { $regex: search } }, { limit: instance.loaded.get(), sort: {createdAt: -1} });
 	}
 });

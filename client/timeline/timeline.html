@@ -1,6 +1,4 @@
 <template name="timeline">
-  {{#if Template.subscriptionsReady}} 
-  {{#if messagesExist}}
   {{#each messages}}
   <div class="panel panel-default">
   <div class="panel-body">
@@ -26,10 +24,4 @@
   {{else}}
     <div class="loading">Loading...</div>
   {{/if}}
-  {{else}}
-  <h1>Nobody you are subscribed to has any posts :(</h1>
-  {{/if}}
-  	{{else}}
-		<div class="loading">{{>spinner}}</div>
-	{{/if}}
 </template>

@@ -1,5 +1,4 @@
 <template name="explore">
-  {{#if Template.subscriptionsReady}}
   {{#each messages}}
   <div class="panel panel-default">
   <div class="panel-body">
@@ -24,7 +23,4 @@
         <div class="loading">Loading...</div>
     </div>
 {{/if}}
-  {{else}}
-    <div class="loading">{{>spinner}}</div>
-  {{/if}}
 </template>
