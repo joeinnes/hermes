@@ -2,7 +2,6 @@
 	{{#unless currentUser}}
 		{{> notloggedin}}
 	{{else}}
-	{{#if Template.subscriptionsReady}} 
 		{{#if getUser}}
 			<h1>{{getUser.username}}</h1>
 			<img class="media-object" src={{getAvatarUrl getUser._id 250}} alt="...">
@@ -40,14 +39,13 @@
 					</div>
 				</div>
 			{{/each}} 
-			{{#if hasMorePosts}}
-				<a class="load-more" href="#">Load More</a>
-			{{/if}} 
+{{#if moreResults}}
+    <div id="showMoreResults">
+        <div class="loading">Loading...</div>
+    </div>
+{{/if}}
 		{{else}}
 			<h1>Sorry, no such user</h1> 
 		{{/if}}
-	{{else}}
-		<div class="loading">{{>spinner}}</div>
-	{{/if}}
 	{{/unless}}
 </template>

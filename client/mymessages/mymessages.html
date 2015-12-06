@@ -1,6 +1,4 @@
 <template name="mymessages">
-  {{#if Template.subscriptionsReady}} 
-  {{#if messages}}
   {{#each messages}}
   <div class="panel panel-default">
   <div class="panel-body">
@@ -19,17 +17,9 @@
   <div class="panel-footer">{{createdAtTime createdAt}} {{#if usersOwn author}}<span class="pull-right"><span class="edit glyphicon glyphicon-pencil" id={{_id}}></span> <span class="delete glyphicon glyphicon-trash" id={{_id}}></span></span>{{/if}}</div>
   </div>
   {{/each}}
-    {{#if Template.subscriptionsReady}}
-    {{#if hasMorePosts}}
-      <a class="load-more" href="#">Load More</a>
-    {{/if}}
-  {{else}}
-    <div class="loading">{{>spinner}}</div>
-  {{/if}}
-  {{else}}
-  <h1>Nobody you are subscribed to has any posts :(</h1>
-  {{/if}}
-  	{{else}}
-		<div class="loading">{{>spinner}}</div>
-	{{/if}}
+{{#if moreResults}}
+    <div id="showMoreResults">
+        <div class="loading">Loading...</div>
+    </div>
+{{/if}}
 </template>

@@ -5,11 +5,11 @@ Template.profile.helpers({
 	},
 	// the posts cursor
 	messages: function () {
-		return Template.instance().messages();
+		return Messages.find({}, {sort: {createdAt: -1}});
 	},
 	// are there more posts to show?
-	hasMoreMessages: function () {
-		return Template.instance().messages().count() >= Template.instance().limit.get();
+	moreResults: function () {
+		return !(Messages.find().count() < Session.get("itemsLimit"));
 	},
 	getAvatarUrl: function(userId, size) {
 		var options = {
@@ -69,20 +69,38 @@ Template.profile.events({
 Template.profile.onCreated(function () {
 
 	var instance = this;
-
-	instance.loaded = new ReactiveVar(0);
-	instance.limit = new ReactiveVar(20);
+	var username = FlowRouter.getParam('username');
+	var query = { username: username };
 
 	instance.autorun(function () {
-		var limit = instance.limit.get();
-		var subscription = instance.subscribe('messages', limit);
-		if (subscription.ready()) {
-			instance.loaded.set(limit);
-		}
+		instance.subscribe('messages', Session.get('itemsLimit'), query);
 	});
-
-    instance.messages = function () {
-		var username = FlowRouter.getParam('username');
-		return Messages.find({ username: username }, { limit: instance.loaded.get(), sort: { createdAt: -1 } });
-	}
+    
 });
+
+function showMoreVisible() {
+	var threshold, target = $("#showMoreResults");
+	if (!target.length) return;
+
+	threshold = $(window).scrollTop() + $(window).height() - target.height() + 50;
+
+	if (target.offset().top < threshold) {
+		if (!target.data("visible")) {
+			target.data("visible", true);
+			incrementLimit(20);
+		}
+	} else {
+		if (target.data("visible")) {
+			target.data("visible", false);
+		}
+	}        
+}
+
+// run the above func every time the user scrolls
+$(window).scroll(showMoreVisible);
+
+incrementLimit = function(inc) {
+	inc = inc || 20;
+	newLimit = Session.get('itemsLimit') + inc;
+	Session.set('itemsLimit', newLimit);
+};
