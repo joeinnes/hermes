@@ -3,7 +3,8 @@ Meteor.publish('messages', function(limit, query) {
   if (query) {
     selector = query;
   }
-  console.log(limit);
+
+  console.log(query);
   return Messages.find(selector, {limit: limit, sort: {createdAt: -1}});
 });
 

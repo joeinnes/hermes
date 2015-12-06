@@ -60,10 +60,13 @@ Template.mymessages.events({
 Template.mymessages.onCreated(function () {
 
 	var instance = this;
-	var search = new RegExp('@' + Meteor.user().username, 'g');
-	var query = { message: { $regex: search } };
 
 	instance.autorun(function () {
+		var search = '';
+		if (Meteor.userId()) {
+			search = '@' + Meteor.user().username;;
+		} 
+		var query = { message: { $regex: search.toString() } };
 		instance.subscribe('messages', Session.get('itemsLimit'), query);
 	});
 });
